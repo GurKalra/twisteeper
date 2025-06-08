@@ -1,0 +1,12 @@
+# Godot 4+ specific ignores
+.import/
+.export/
+.export_template/
+*.godot/tmp/
+*.tmp
+*.log
+*.cfg
+*.ini
+.DS_Store
+Thumbs.db
+

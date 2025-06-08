@@ -1,0 +1,14 @@
+===========================
+ RULES BEFORE RUNNING
+===========================
+
+1. The game is made with Godot 4.4.
+2. This is a MINESWEEPER game with a twist.
+3. The board rotates 90° every 8 left-clicks.
+4. Flagged tiles "lock" their layers and will not rotate.
+5. Only left-clicking (reveal) counts toward the 8-click twist trigger.
+6. UI is minimal — no flashy visuals, just function.
+7. If you're playing a build, no Godot installation is needed.
+8. Bugs may exist — it was built in 2 days.
+9. Don’t unflag and reflag — it won’t break, but it’s weird.
+10. Have fun and spin your brain 😵
