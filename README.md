@@ -21,20 +21,38 @@ Made for the 2-Day Pausch Challenge 🏆
 
 ## 🚀 Download & Play
 
-### Windows
-[Download Windows Build](put url)
+### 🪟 Windows
+[Download Windows Build (zip)](https://github.com/GurKalra/twisteeper/releases/latest)
 
-### Linux  
-[Download Linux Build](put url)
-### Web (itch.io)
-[Play on itch.io](put url)
+### 🐧 Linux  
+[Download Linux Build (zip)](https://github.com/GurKalra/twisteeper/releases/latest)
+
+### 🌐 Web (itch.io)
+[Play on itch.io](https://your-itch-link-here)
+
+### 🧰 Run Locally (Optional)
+
+If you cloned the GitHub repo and want to run the game directly:
+
+#### On Windows:
+1. Navigate to `twisteeper_windows/`
+2. Double click `Twisteeper.exe`
+
+#### On Linux:
+1. Open terminal in `twisteeper_linux/`
+2. Run:  
+   ```bash
+   chmod +x Twisteeper.x86_64
+   ./Twisteeper.x86_64
+
 
 ## 🛠️ Built With
 
-- **Engine**: Godot 4.4
+- **Engine**: Godot 4.4.1
 - **Language**: GDScript
 - **Development Time**: 2 days
 - **Art**: Hand-made pixel art (no AI)
+           https://github.com/russs123/minesweeper_tut
 
 
 ## 🎮 Game Features
