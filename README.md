@@ -28,7 +28,7 @@ Made for the 2-Day Pausch Challenge 🏆
 [Download Linux Build (zip)](https://github.com/GurKalra/twisteeper/releases/latest)
 
 ### 🌐 Web (itch.io)
-[Play on itch.io](https://your-itch-link-here)
+[Play on itch.io](https://gurgames.itch.io/twisteeper)
 
 ### 🧰 Run Locally (Optional)
 
