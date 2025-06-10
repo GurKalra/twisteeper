@@ -51,7 +51,7 @@ If you cloned the GitHub repo and want to run the game directly:
 - **Language**: GDScript
 - **Development Time**: 2 days
 - **Art**: Hand-made pixel art (no AI)
-  -https://github.com/russs123/minesweeper_tut
+  - (https://github.com/russs123/minesweeper_tut)
   - Sounds from freesound.org
 
 
