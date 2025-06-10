@@ -12,6 +12,8 @@ signal end_game
 signal game_won
 signal flag_placed
 signal flag_removed
+signal cell_revealed
+signal board_twisted
 
 # Grid variables
 const ROWS : int = 14
@@ -22,12 +24,12 @@ const TOTAL_MINES : int = 20
 # Tilemap variables
 var tile_id : int = 0
 
-# Layer variables
-var mine_layer : int = 0
-var number_layer : int = 1
-var grass_layer : int = 2
-var flag_layer : int = 3
-var hover_layer : int = 4
+# Layer variables - FIXED ORDER: bottom to top
+var mine_layer : int = 0      # Bottom layer (hidden mines)
+var number_layer : int = 1    # Numbers (revealed)
+var grass_layer : int = 2     # Grass cover (middle)
+var flag_layer : int = 3      # Flags (above grass)
+var hover_layer : int = 4     # Hover effect (top)
 
 # Atlas coordinates
 var mine_atlas := Vector2i(4, 0)
@@ -42,7 +44,7 @@ var mine_coords := []
 var scanning := false
 
 # Flag limiting variables
-const MAX_FLAGS : int = 13
+const MAX_FLAGS : int = 15
 var current_flags : int = 0
 
 func generate_number_atlas():
@@ -57,26 +59,39 @@ func _ready():
 	
 # Reset game
 func new_game():
-	clear()
+	clear_all_layers()
 	mine_coords.clear()
 	current_flags = 0
 	generate_mines()
 	generate_numbers()
 	generate_grass()
 
-# Twist the entire board 90 degrees clockwise
+# Clear all layers properly
+func clear_all_layers():
+	for layer in range(5):  # Clear all 5 layers
+		clear_layer(layer)
+
+# Simple instant twist function - NO ANIMATION
 func twist_board():
-	print("Twisting board! Flagged positions will stay frozen.")
+	print("Starting instant board twist! Flagged positions will stay frozen.")
 	
 	var flagged_positions = get_used_cells(flag_layer)
 	print("Frozen positions: ", flagged_positions)
 	
-	# Store current state
+	# Play twist sound
+	board_twisted.emit()
+	
+	# Do the actual board transformation instantly
+	perform_board_twist_logic(flagged_positions)
+	
+	print("Instant board twist complete!")
+
+func perform_board_twist_logic(flagged_positions):
+	# Store current state of ALL layers except flags
 	var mine_data = get_layer_data_excluding_flags(mine_layer, flagged_positions)
-	var number_data = get_layer_data_excluding_flags(number_layer, flagged_positions)
 	var grass_data = get_layer_data_excluding_flags(grass_layer, flagged_positions)
 	
-	# Clear layers
+	# Clear layers except flags
 	clear_layer_excluding_flags(mine_layer, flagged_positions)
 	clear_layer_excluding_flags(number_layer, flagged_positions)
 	clear_layer_excluding_flags(grass_layer, flagged_positions)
@@ -88,10 +103,8 @@ func twist_board():
 	# Update mine coordinates
 	update_mine_coords_after_rotation()
 	
-	# Regenerate numbers AFTER mines are in place
+	# Regenerate numbers based on new mine positions
 	generate_numbers_avoiding_flags(flagged_positions)
-	
-	print("Board twist complete!")
 
 func get_layer_data_excluding_flags(layer_index, flagged_positions):
 	var data = {}
@@ -204,6 +217,8 @@ func generate_numbers():
 			set_cell(number_layer, i, tile_id, number_atlas[mine_count - 1])
 
 func generate_grass():
+	# Clear grass layer first
+	clear_layer(grass_layer)
 	for y in range(ROWS):
 		for x in range(COLS):
 			var toggle = ((x + y) % 2)
@@ -270,7 +285,47 @@ func _input(event):
 					if had_flag != is_flag(map_pos):
 						get_parent().increment_click_count()
 
-# No flood fill - reveal only single cell
+# Flood fill algorithm to reveal connected empty cells
+func flood_fill(start_pos):
+	var cells_to_check = [start_pos]
+	var processed_cells = {}
+	var cells_revealed = false
+	
+	while cells_to_check.size() > 0:
+		var current_cell = cells_to_check.pop_back()
+		
+		# Skip if already processed
+		if processed_cells.has(current_cell):
+			continue
+			
+		# Mark as processed
+		processed_cells[current_cell] = true
+		
+		# Skip if not grass (already revealed), is a mine, or is flagged
+		if not is_grass(current_cell) or is_mine(current_cell) or is_flag(current_cell):
+			continue
+		
+		# Reveal the current cell
+		erase_cell(grass_layer, current_cell)
+		cells_revealed = true
+		
+		# Count surrounding mines
+		var mine_count = count_surrounding_mines(current_cell)
+		
+		# If there are surrounding mines, place the number and stop expanding from this cell
+		if mine_count > 0:
+			set_cell(number_layer, current_cell, tile_id, number_atlas[mine_count - 1])
+		else:
+			# If no surrounding mines, add all neighbors to be checked
+			for neighbor in get_all_surrounding_cells(current_cell):
+				if not processed_cells.has(neighbor):
+					cells_to_check.append(neighbor)
+	
+	# Emit signal if any cells were revealed (for sound effect)
+	if cells_revealed:
+		cell_revealed.emit()
+
+# Updated left click processing with flood fill
 func process_left_click(pos):
 	get_parent().first_click = false
 	
@@ -278,16 +333,10 @@ func process_left_click(pos):
 	if not is_grass(pos):
 		return
 	
-	# Clear grass to reveal the cell
-	erase_cell(grass_layer, pos)
+	# Use flood fill to reveal connected areas
+	flood_fill(pos)
 	
-	# If it's not a mine and doesn't have a number, generate one
-	if not is_mine(pos) and not is_number(pos):
-		var mine_count = count_surrounding_mines(pos)
-		if mine_count > 0:
-			set_cell(number_layer, pos, tile_id, number_atlas[mine_count - 1])
-	
-	# Check win condition: all non-mine cells are revealed
+	# Check win condition after revealing cells
 	check_win_condition()
 
 func check_win_condition():
@@ -341,6 +390,7 @@ func move_mine(old_pos):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	highlight_cell()
+	
 	# Scan mines
 	if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and 
 		Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):

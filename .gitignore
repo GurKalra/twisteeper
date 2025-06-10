@@ -7,11 +7,13 @@
 *.log
 *.cfg
 *.ini
+*.exe
+*.x86_64
+
+
 .DS_Store
 Thumbs.db
 
-twisteeper_linux/
-twisteeper_windows/
-Twisteeper_Linux.zip
-Twisteeper_Windows.zip
+twisteeper_linux.zip
+twisteeper_windows.zip
 .godot/
