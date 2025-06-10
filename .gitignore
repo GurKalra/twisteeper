@@ -9,6 +9,7 @@
 *.ini
 *.exe
 *.x86_64
+*.pck
 
 
 .DS_Store
