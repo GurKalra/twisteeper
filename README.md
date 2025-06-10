@@ -50,9 +50,9 @@ If you cloned the GitHub repo and want to run the game directly:
 - **Engine**: Godot 4.4.1
 - **Language**: GDScript
 - **Development Time**: 2 days
-- **Art**: Hand-made pixel art (no AI) 
-         -https://github.com/russs123/minesweeper_tut
-         - Sounds from freesound.org
+- **Art**: Hand-made pixel art (no AI)
+  -https://github.com/russs123/minesweeper_tut
+  - Sounds from freesound.org
 
 
 ## 🎮 Game Features
