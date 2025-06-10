@@ -59,16 +59,16 @@ If you cloned the GitHub repo and want to run the game directly:
 ## 🎮 Game Features
 
 - 14x15 grid with 20 mines
-- Flag limit: 13 flags
+- Flag limit: 15 flags
 - Board rotation every 8 clicks
 - Frozen flag mechanic
-- Clean pixel art style
+- Clean art style
 - Timer and click counter
 - Win/lose detection
 
 ## 🏗️ Development Notes
 
-This was created as part of a 2-day game jam challenge. The core idea was to take the familiar Minesweeper formula and add one meaningful twist that changes the entire strategic landscape.
+This was created as part of a 2-day challenge. The core idea was to take the familiar Minesweeper formula and add one meaningful twist that changes the entire strategic landscape.
 
 The "frozen flags" mechanic emerged naturally - if the board is twisting, players need something stable to anchor their strategy around.
 
