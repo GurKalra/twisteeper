@@ -8,7 +8,6 @@ Made for the 2-Day Pausch Challenge 🏆
 
 - Board rotates every 8 clicks
 - Flagged cells become immovable anchors
-- No flood fill - every click counts
 - Strategic flag placement is key!
 
 ## 🎯 How to Play
