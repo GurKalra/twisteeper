@@ -2,7 +2,7 @@
 
 **Minesweeper with a twist!** The board rotates 90° clockwise every 8 clicks, but flagged cells stay frozen in place.
 
-Made for the 2-Day Pausch Challenge 🏆
+Made for the 2-Day Pausch Challenge 
 
 ## 🌟 The Twist
 
